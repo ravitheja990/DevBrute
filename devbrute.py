@@ -1,6 +1,5 @@
 import argparse
 import os
-import random
 import re
 import sys
 import time
@@ -25,6 +24,7 @@ from proxyscrape import create_collector, get_collector
 
 # Define avoidance patterns
 import re
+import secrets
 
 avoidance_patterns = [
     r'^[0-9]+$',  # Avoid using all numeric passwords
@@ -110,10 +110,10 @@ class Bruter:
                 progressive_delay = min(delay * (2 ** unsuccessful_attempts), max_delay)
 
                 # Add a randomized delay (with a maximum value)
-                randomized_delay = random.uniform(0, progressive_delay)
+                randomized_delay = secrets.SystemRandom().uniform(0, progressive_delay)
 
                 # Rotate Proxy
-                proxy = random.choice(proxies)
+                proxy = secrets.SystemRandom().choice(proxies)
                 webdriver.DesiredCapabilities.FIREFOX['proxy'] = {
                     "httpProxy": proxy,
                     "ftpProxy": proxy,
@@ -129,7 +129,7 @@ class Bruter:
                 # Randomize keystroke timing
                 for char in password:
                     elem.send_keys(char)
-                    time.sleep(random.uniform(0.1, 0.5))  # Random delay between keystrokes
+                    time.sleep(secrets.SystemRandom().uniform(0.1, 0.5))  # Random delay between keystrokes
 
                 elem.send_keys(Keys.RETURN)
 
